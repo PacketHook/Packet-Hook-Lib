@@ -3172,15 +3172,29 @@ function Library:CreateWindow(...)
         end
     end)
 
-    local DragLabel = Library:CreateLabel({
-        AnchorPoint = Vector2.new(1, 0.5);
-        Position = UDim2.new(1, -12, 0.5, 0);
-        Size = UDim2.new(0, 22, 0, 22);
-        Text = '+';
-        TextSize = 20;
-        ZIndex = 3;
-        Parent = TopBar;
+    -- Lucide "Expand" icon — 4 corner brackets built from frames, no asset needed
+    local ExpandBtn = Library:Create('Frame', {
+        AnchorPoint          = Vector2.new(1, 0.5);
+        Position             = UDim2.new(1, -12, 0.5, 0);
+        Size                 = UDim2.new(0, 18, 0, 18);
+        BackgroundTransparency = 1;
+        ZIndex               = 3;
+        Parent               = TopBar;
     });
+    local function MakeBracket(hx, hy, vx, vy)
+        Library:Create('Frame', { BackgroundColor3 = Library.SubtextColor; BorderSizePixel = 0;
+            Position = UDim2.new(0, hx, 0, hy); Size = UDim2.new(0, 6, 0, 2); ZIndex = 4; Parent = ExpandBtn; });
+        Library:Create('Frame', { BackgroundColor3 = Library.SubtextColor; BorderSizePixel = 0;
+            Position = UDim2.new(0, vx, 0, vy); Size = UDim2.new(0, 2, 0, 6); ZIndex = 4; Parent = ExpandBtn; });
+    end;
+    MakeBracket(0,  0,  0,  0);   -- top-left
+    MakeBracket(12, 0,  16, 0);   -- top-right
+    MakeBracket(0,  16, 0,  12);  -- bottom-left
+    MakeBracket(12, 16, 16, 12);  -- bottom-right
+    ExpandBtn.InputBegan:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 then task.spawn(Library.Toggle) end;
+    end);
+    local DragLabel = ExpandBtn;
 
     -- Content area (right of sidebar, below search bar)
     local MainSectionInner = Library:Create('Frame', {
@@ -3209,7 +3223,7 @@ function Library:CreateWindow(...)
         WindowLabel.Text = Title;
     end;
 
-    function Window:AddTab(Name)
+    function Window:AddTab(Name, iconId)
         local Tab = {
             Groupboxes = {};
             Tabboxes = {};
@@ -3238,9 +3252,24 @@ function Library:CreateWindow(...)
         Library:Create('UICorner', { CornerRadius = UDim.new(0, 2); Parent = Blocker; });
         Library:AddToRegistry(Blocker, { BackgroundColor3 = 'AccentColor' });
 
+        -- Optional Lucide icon (pass rbxassetid://... as iconId)
+        local TabIcon;
+        if iconId then
+            TabIcon = Library:Create('ImageLabel', {
+                BackgroundTransparency = 1;
+                Position               = UDim2.new(0, 14, 0.5, -8);
+                Size                   = UDim2.new(0, 16, 0, 16);
+                Image                  = iconId;
+                ImageColor3            = Library.SubtextColor;
+                ZIndex                 = 4;
+                Parent                 = TabButton;
+            });
+        end;
+
+        local textX = iconId and 38 or 16;
         local TabButtonLabel = Library:CreateLabel({
-            Position = UDim2.new(0, 16, 0, 0);
-            Size = UDim2.new(1, -16, 1, 0);
+            Position = UDim2.new(0, textX, 0, 0);
+            Size = UDim2.new(1, -textX, 1, 0);
             Text = Name;
             TextSize = 14;
             TextXAlignment = Enum.TextXAlignment.Left;
@@ -3318,6 +3347,7 @@ function Library:CreateWindow(...)
             Library.RegistryMap[TabButtonLabel].Properties.TextColor3 = 'FontColor';
             TabButton.BackgroundColor3 = Library.ActiveTabColor;
             Library.RegistryMap[TabButton].Properties.BackgroundColor3 = 'ActiveTabColor';
+            if TabIcon then TabIcon.ImageColor3 = Library.FontColor end;
             TabFrame.Visible = true;
         end;
 
@@ -3327,6 +3357,7 @@ function Library:CreateWindow(...)
             Library.RegistryMap[TabButtonLabel].Properties.TextColor3 = 'SubtextColor';
             TabButton.BackgroundColor3 = Library.MainColor;
             Library.RegistryMap[TabButton].Properties.BackgroundColor3 = 'MainColor';
+            if TabIcon then TabIcon.ImageColor3 = Library.SubtextColor end;
             TabFrame.Visible = false;
         end;
 
