@@ -10,10 +10,24 @@ function ThemeManager:SetLibrary(library)
 	self.Library = library
 end
 
+function ThemeManager:SetFolder(folder)
+	self.Folder = folder
+	self:BuildFolderTree()
+end
+
+function ThemeManager:ApplyToTab(tab)
+	self:BuildThemeSection(tab)
+end
+
 function ThemeManager:BuildFolderTree()
-	for _, path in next, { self.Folder, self.Folder .. '/themes' } do
-		if not isfolder(path) then makefolder(path) end
+	local parts = {}
+	for segment in self.Folder:gmatch('[^/\\]+') do
+		table.insert(parts, segment)
+		local p = table.concat(parts, '/')
+		if not isfolder(p) then makefolder(p) end
 	end
+	local t = self.Folder .. '/themes'
+	if not isfolder(t) then makefolder(t) end
 end
 
 function ThemeManager:Save(name)
