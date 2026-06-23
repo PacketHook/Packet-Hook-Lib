@@ -168,8 +168,8 @@ function ThemeManager:BuildThemeSection(tab)
 	})
 	lib.SetTransparency(5 / 50)
 
-	-- ── Theme save/load (right column) ───────────────────────────────
-	local saveGroup = tab:AddRightGroupbox('Themes')
+	-- ── Theme save/load (left column, below color pickers) ───────────
+	local saveGroup = tab:AddLeftGroupbox('Themes')
 
 	saveGroup:AddInput('ThemeManager_ThemeName', {
 		Text     = 'Theme name',
