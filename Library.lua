@@ -3768,11 +3768,18 @@ function Library:CreateWindow(...)
 
     if Config.AutoShow then task.spawn(Library.Toggle) end
 
+    Library.CurrentTransparency = 0
     Library.SetTransparency = function(t)
-        Outer.BackgroundTransparency            = t
-        Sidebar.BackgroundTransparency          = t
-        TopBar.BackgroundTransparency           = t
-        MainSectionInner.BackgroundTransparency = t
+        Library.CurrentTransparency = t
+        for _, Data in next, Library.Registry do
+            local inst = Data.Instance
+            if inst and inst.Parent then
+                local key = Data.Properties.BackgroundColor3
+                if key == 'BackgroundColor' or key == 'MainColor' or key == 'ButtonColor' then
+                    pcall(function() inst.BackgroundTransparency = t end)
+                end
+            end
+        end
     end
 
     Window.Holder = Outer;
