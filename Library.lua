@@ -3015,12 +3015,12 @@ function Library:CreateWindow(...)
         Parent = Sidebar;
     });
 
-    -- Three macOS-style colored dots
+    -- Three macOS-style colored dots (8×8, transparency tracks UI transparency)
     local dot1 = Library:Create('Frame', {
         BackgroundColor3 = Color3.fromRGB(255, 95, 87);
         BorderSizePixel = 0;
-        Position = UDim2.new(0, 14, 0, 18);
-        Size = UDim2.new(0, 11, 0, 11);
+        Position = UDim2.new(0, 14, 0, 19);
+        Size = UDim2.new(0, 8, 0, 8);
         ZIndex = 4;
         Parent = Sidebar;
     });
@@ -3029,8 +3029,8 @@ function Library:CreateWindow(...)
     local dot2 = Library:Create('Frame', {
         BackgroundColor3 = Color3.fromRGB(255, 189, 46);
         BorderSizePixel = 0;
-        Position = UDim2.new(0, 30, 0, 18);
-        Size = UDim2.new(0, 11, 0, 11);
+        Position = UDim2.new(0, 27, 0, 19);
+        Size = UDim2.new(0, 8, 0, 8);
         ZIndex = 4;
         Parent = Sidebar;
     });
@@ -3039,12 +3039,13 @@ function Library:CreateWindow(...)
     local dot3 = Library:Create('Frame', {
         BackgroundColor3 = Color3.fromRGB(39, 201, 63);
         BorderSizePixel = 0;
-        Position = UDim2.new(0, 46, 0, 18);
-        Size = UDim2.new(0, 11, 0, 11);
+        Position = UDim2.new(0, 40, 0, 19);
+        Size = UDim2.new(0, 8, 0, 8);
         ZIndex = 4;
         Parent = Sidebar;
     });
     Library:Create('UICorner', { CornerRadius = UDim.new(1, 0); Parent = dot3; });
+    Library.Dots = { dot1, dot2, dot3 };
 
     -- Hub icon circle
     local HubIcon = Library:Create('Frame', {
@@ -3810,12 +3811,18 @@ function Library:CreateWindow(...)
                 if key == 'BackgroundColor' or key == 'MainColor' or key == 'ButtonColor' then
                     pcall(function()
                         inst.BackgroundTransparency = t
-                        -- keep the toggle-restore cache in sync so maximize restores correct value
                         local cache = TransparencyCache[inst]
                         if cache then cache.BackgroundTransparency = t end
                     end)
                 end
             end
+        end
+        for _, dot in ipairs(Library.Dots or {}) do
+            pcall(function()
+                dot.BackgroundTransparency = t
+                local cache = TransparencyCache[dot]
+                if cache then cache.BackgroundTransparency = t end
+            end)
         end
     end
 
