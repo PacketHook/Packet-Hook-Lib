@@ -56,9 +56,14 @@ function SaveManager:SetFolder(folder)
 end
 
 function SaveManager:BuildFolderTree()
-	for _, path in next, { self.Folder, self.Folder .. '/settings' } do
-		if not isfolder(path) then makefolder(path) end
+	local parts = {}
+	for segment in self.Folder:gmatch('[^/\\]+') do
+		table.insert(parts, segment)
+		local p = table.concat(parts, '/')
+		if not isfolder(p) then makefolder(p) end
 	end
+	local s = self.Folder .. '/settings'
+	if not isfolder(s) then makefolder(s) end
 end
 
 function SaveManager:Save(name)
