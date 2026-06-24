@@ -1391,8 +1391,11 @@ do
         });
 
         if DoesWrap then
-            local Y = select(2, Library:GetTextBounds(Text, Library.Font, 14, Vector2.new(TextLabel.AbsoluteSize.X, math.huge)))
-            TextLabel.Size = UDim2.new(1, -4, 0, Y)
+            local w = TextLabel.AbsoluteSize.X
+            if w <= 0 then w = Container.AbsoluteSize.X - 4 end
+            if w <= 0 then w = 180 end
+            local Y = select(2, Library:GetTextBounds(Text, Library.Font, 14, Vector2.new(w, math.huge)))
+            TextLabel.Size = UDim2.new(1, -4, 0, math.max(Y, 14))
         else
             Library:Create('UIListLayout', {
                 Padding = UDim.new(0, 4);
@@ -1410,8 +1413,11 @@ do
             TextLabel.Text = Text
 
             if DoesWrap then
-                local Y = select(2, Library:GetTextBounds(Text, Library.Font, 14, Vector2.new(TextLabel.AbsoluteSize.X, math.huge)))
-                TextLabel.Size = UDim2.new(1, -4, 0, Y)
+                local w = TextLabel.AbsoluteSize.X
+                if w <= 0 then w = Container.AbsoluteSize.X - 4 end
+                if w <= 0 then w = 180 end
+                local Y = select(2, Library:GetTextBounds(Text, Library.Font, 14, Vector2.new(w, math.huge)))
+                TextLabel.Size = UDim2.new(1, -4, 0, math.max(Y, 14))
             end
 
             Groupbox:Resize();
@@ -3767,42 +3773,14 @@ function Library:CreateWindow(...)
             Outer.Visible = true;
 
             task.spawn(function()
-                -- TODO: add cursor fade?
                 local State = InputService.MouseIconEnabled;
-
-                local Cursor = Drawing.new('Triangle');
-                Cursor.Thickness = 1;
-                Cursor.Filled = true;
-                Cursor.Visible = true;
-
-                local CursorOutline = Drawing.new('Triangle');
-                CursorOutline.Thickness = 1;
-                CursorOutline.Filled = false;
-                CursorOutline.Color = Color3.new(0, 0, 0);
-                CursorOutline.Visible = true;
+                InputService.MouseIconEnabled = true;
 
                 while Toggled and ScreenGui.Parent do
-                    InputService.MouseIconEnabled = false;
-
-                    local mPos = InputService:GetMouseLocation();
-
-                    Cursor.Color = Library.AccentColor;
-
-                    Cursor.PointA = Vector2.new(mPos.X, mPos.Y);
-                    Cursor.PointB = Vector2.new(mPos.X + 16, mPos.Y + 6);
-                    Cursor.PointC = Vector2.new(mPos.X + 6, mPos.Y + 16);
-
-                    CursorOutline.PointA = Cursor.PointA;
-                    CursorOutline.PointB = Cursor.PointB;
-                    CursorOutline.PointC = Cursor.PointC;
-
                     RenderStepped:Wait();
                 end;
 
                 InputService.MouseIconEnabled = State;
-
-                Cursor:Remove();
-                CursorOutline:Remove();
             end);
         end;
 
