@@ -75,7 +75,7 @@ function ThemeManager:Load(name)
 
 	if data.Transparency ~= nil then
 		if Opts and Opts.UiTransparency then
-			Opts.UiTransparency:SetValue(data.Transparency)
+			Opts.UiTransparency:SetValue(data.Transparency * 50)
 		else
 			lib.SetTransparency(data.Transparency)
 		end
