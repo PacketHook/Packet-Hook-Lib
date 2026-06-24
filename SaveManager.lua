@@ -179,6 +179,16 @@ function SaveManager:BuildConfigSection(tab)
 		else L:Notify('Save failed: ' .. (err or 'none selected'), 4) end
 	end)
 
+	section:AddButton('Delete config', function()
+		local name = Opts.SaveManager_ConfigList.Value
+		if not name then L:Notify('No config selected', 3) return end
+		local path = self.Folder .. '/settings/' .. name .. '.json'
+		if isfile(path) then delfile(path) end
+		L:Notify("Deleted '" .. name .. "'", 3)
+		Opts.SaveManager_ConfigList:SetValues(self:RefreshConfigList())
+		Opts.SaveManager_ConfigList:SetValue(nil)
+	end)
+
 	section:AddButton('Refresh list', function()
 		Opts.SaveManager_ConfigList:SetValues(self:RefreshConfigList())
 		Opts.SaveManager_ConfigList:SetValue(nil)

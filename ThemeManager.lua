@@ -211,6 +211,16 @@ function ThemeManager:BuildThemeSection(tab)
 		else lib:Notify('Save failed: ' .. tostring(err or 'none selected'), 4) end
 	end)
 
+	saveGroup:AddButton('Delete theme', function()
+		local name = Opts.ThemeManager_ThemeList.Value
+		if not name then lib:Notify('No theme selected', 3) return end
+		local path = self.Folder .. '/themes/' .. name .. '.json'
+		if isfile(path) then delfile(path) end
+		lib:Notify("Deleted theme '" .. name .. "'", 3)
+		Opts.ThemeManager_ThemeList:SetValues(self:RefreshThemeList())
+		Opts.ThemeManager_ThemeList:SetValue(nil)
+	end)
+
 	saveGroup:AddButton('Refresh list', function()
 		Opts.ThemeManager_ThemeList:SetValues(self:RefreshThemeList())
 		Opts.ThemeManager_ThemeList:SetValue(nil)
