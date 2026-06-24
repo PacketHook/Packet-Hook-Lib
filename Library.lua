@@ -2226,7 +2226,7 @@ do
 
         NumberInput.FocusLost:Connect(function()
             local suffix = Info.Suffix or ''
-            local num = tonumber(NumberInput.Text:gsub('[^%d%.-]', ''))
+            local num = tonumber((NumberInput.Text:gsub('[^%d%.-]', '')))
             if num then
                 num = math.clamp(num, Slider.Min, Slider.Max)
                 Slider.Value = num
