@@ -158,7 +158,7 @@ function ThemeManager:BuildThemeSection(tab)
 	})
 	colorGroup:AddSlider('UiTransparency', {
 		Text     = 'UI Transparency',
-		Default  = 25,
+		Default  = 0,
 		Min      = 0,
 		Max      = 50,
 		Rounding = 1,
@@ -166,7 +166,6 @@ function ThemeManager:BuildThemeSection(tab)
 			lib.SetTransparency(val / 50)
 		end,
 	})
-	lib.SetTransparency(25 / 50)
 
 	-- ── Theme save/load (left column, below color pickers) ───────────
 	local saveGroup = tab:AddLeftGroupbox('Themes')
