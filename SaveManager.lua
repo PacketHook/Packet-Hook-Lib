@@ -5,7 +5,7 @@ local httpService = game:GetService('HttpService')
 
 local SaveManager = {}
 
-SaveManager.Folder = 'PacketHook'
+SaveManager.Folder = 'Packet Hook'
 SaveManager.Ignore = {}
 SaveManager.Parser = {
 	Toggle = {

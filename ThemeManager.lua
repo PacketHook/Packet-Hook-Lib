@@ -4,7 +4,7 @@
 local httpService = game:GetService('HttpService')
 
 local ThemeManager = {}
-ThemeManager.Folder = 'PacketHook'
+ThemeManager.Folder = 'Packet Hook'
 
 function ThemeManager:SetLibrary(library)
 	self.Library = library
