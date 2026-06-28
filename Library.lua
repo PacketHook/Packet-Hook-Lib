@@ -3284,24 +3284,14 @@ function Library:CreateWindow(...)
     Library:Create('UICorner', { CornerRadius = UDim.new(1, 0); Parent = dot3; });
     Library.Dots = { dot1, dot2, dot3 };
 
-    -- Hub icon circle
-    local HubIcon = Library:Create('Frame', {
-        BackgroundColor3 = Library.AccentColor;
-        BorderSizePixel = 0;
-        Position = UDim2.new(0, 14, 0, 42);
-        Size = UDim2.new(0, 34, 0, 34);
-        ZIndex = 4;
-        Parent = Sidebar;
-    });
-    Library:Create('UICorner', { CornerRadius = UDim.new(1, 0); Parent = HubIcon; });
-    Library:AddToRegistry(HubIcon, { BackgroundColor3 = 'AccentColor' });
     Library:Create('ImageLabel', {
         BackgroundTransparency = 1;
-        Size = UDim2.new(1, 0, 1, 0);
+        Position = UDim2.new(0, 14, 0, 42);
+        Size = UDim2.new(0, 34, 0, 34);
         Image = Config.ImageId and Config.ImageId ~= '' and ('rbxassetid://' .. tostring(Config.ImageId)) or '';
         ScaleType = Enum.ScaleType.Fit;
         ZIndex = 5;
-        Parent = HubIcon;
+        Parent = Sidebar;
     });
 
     -- Title
