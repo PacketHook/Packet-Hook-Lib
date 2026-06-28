@@ -3284,15 +3284,21 @@ function Library:CreateWindow(...)
     Library:Create('UICorner', { CornerRadius = UDim.new(1, 0); Parent = dot3; });
     Library.Dots = { dot1, dot2, dot3 };
 
-    Library:Create('ImageLabel', {
-        BackgroundTransparency = 1;
-        Position = UDim2.new(0, 14, 0, 42);
-        Size = UDim2.new(0, 34, 0, 34);
-        Image = Config.ImageId and Config.ImageId ~= '' and ('rbxassetid://' .. tostring(Config.ImageId)) or '';
-        ScaleType = Enum.ScaleType.Fit;
-        ZIndex = 5;
-        Parent = Sidebar;
-    });
+    do
+        local _hubImg = Instance.new('ImageLabel')
+        _hubImg.BackgroundTransparency = 1
+        _hubImg.BorderSizePixel        = 0
+        _hubImg.Position               = UDim2.new(0, 14, 0, 42)
+        _hubImg.Size                   = UDim2.new(0, 34, 0, 34)
+        _hubImg.ScaleType              = Enum.ScaleType.Fit
+        _hubImg.ImageColor3            = Color3.new(1, 1, 1)
+        _hubImg.ImageTransparency      = 0
+        _hubImg.ZIndex                 = 50
+        _hubImg.Parent                 = Sidebar
+        if Config.ImageId and Config.ImageId ~= '' then
+            _hubImg.Image = 'rbxassetid://' .. tostring(Config.ImageId)
+        end
+    end
 
     -- Title
     local TitleLabel = Library:CreateLabel({
